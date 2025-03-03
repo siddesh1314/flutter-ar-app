@@ -7,9 +7,9 @@ import 'package:ar_flutter_plugin/models/ar_node.dart';
 import 'package:flutter/material.dart';
 import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
 
-// import 'package:flutter/material.dart';
-// import 'package:ar_flutter_plugin/ar_flutter_plugin.dart';
 import 'package:vector_math/vector_math_64.dart';
+
+import 'ar_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -32,12 +32,12 @@ class ImageSelectionScreen extends StatelessWidget {
     {
       "thumbnail": "assets/thumbnails/image1.png",
       "model":
-          "https://github.com/KhronosGroup/glTF-Sample-Assets/blob/main/Models/ChairDamaskPurplegold/glTF-Binary/ChairDamaskPurplegold.glb?raw=true"
+          "https://github.com/microsoft/experimental-pcf-control-assets/blob/master/chair.glb?raw=true"
     },
     {
       "thumbnail": "assets/thumbnails/image2.png",
       "model":
-          "https://github.com/microsoft/experimental-pcf-control-assets/blob/master/chair.glb?raw=true"
+          "https://github.com/KhronosGroup/glTF-Sample-Assets/blob/main/Models/ChairDamaskPurplegold/glTF-Binary/ChairDamaskPurplegold.glb?raw=true"
     },
     {
       "thumbnail": "assets/thumbnails/image3.png",
@@ -45,19 +45,19 @@ class ImageSelectionScreen extends StatelessWidget {
           "https://github.com/KhronosGroup/glTF-Sample-Assets/blob/main/Models/SheenChair/glTF-Binary/SheenChair.glb?raw=true"
     },
     {
-      "thumbnail": "assets/thumbnails/image4.png",
+      "thumbnail": "assets/thumbnails/caterpie.png",
       "model":
-          "https://github.com/KhronosGroup/glTF-Sample-Assets/blob/main/Models/ChairDamaskPurplegold/glTF-Binary/ChairDamaskPurplegold.glb?raw=true"
+          "https://github.com/Sudhanshu-Ambastha/Pokemon-3D/blob/main/models/glb/regular/10.glb?raw=true"
     },
     {
-      "thumbnail": "assets/thumbnails/image5.png",
+      "thumbnail": "assets/thumbnails/cubone.png",
       "model":
-          "https://github.com/microsoft/experimental-pcf-control-assets/blob/master/chair.glb?raw=true"
+          "https://github.com/Sudhanshu-Ambastha/Pokemon-3D/blob/main/models/glb/regular/104.glb?raw=true"
     },
     {
-      "thumbnail": "assets/thumbnails/image6.png",
+      "thumbnail": "assets/thumbnails/bulbasaur.png",
       "model":
-          "https://github.com/KhronosGroup/glTF-Sample-Assets/blob/main/Models/SheenChair/glTF-Binary/SheenChair.glb?raw=true"
+          "https://github.com/Sudhanshu-Ambastha/Pokemon-3D/blob/main/models/glb/regular/1.glb?raw=true"
     },
   ];
 
@@ -131,65 +131,5 @@ class ImageSelectionScreen extends StatelessWidget {
         },
       ),
     );
-  }
-}
-
-class ARScreen extends StatefulWidget {
-  final String imagePath;
-
-  const ARScreen({super.key, required this.imagePath});
-
-  @override
-  State<ARScreen> createState() => _ARScreenState();
-}
-
-class _ARScreenState extends State<ARScreen> {
-  ARSessionManager? arSessionManager;
-  ARObjectManager? arObjectManager;
-  ARNode? imageNode;
-
-  @override
-  void dispose() {
-    arSessionManager?.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("AR View")),
-      body: ARView(
-        onARViewCreated: onARViewCreated,
-      ),
-    );
-  }
-
-  void onARViewCreated(
-    ARSessionManager sessionManager,
-    ARObjectManager objectManager,
-    ARAnchorManager? anchorManager,
-    ARLocationManager locationManager,
-  ) {
-    arSessionManager = sessionManager;
-    arObjectManager = objectManager;
-    _loadARImage(widget.imagePath);
-  }
-
-  Future<void> _loadARImage(String imagePath) async {
-    if (arObjectManager == null) return;
-
-    final newNode = ARNode(
-      type: NodeType.webGLB,
-      uri: imagePath,
-      scale: Vector3(0.5, 0.5, 0.5),
-      position: Vector3(0, 0, -1),
-    );
-
-    bool success = await arObjectManager!.addNode(newNode) ?? false;
-    if (success) {
-      setState(() {
-        imageNode = newNode;
-      });
-    }
   }
 }
